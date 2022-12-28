@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-int comparator(const void *p1,const void *p2)//used by qsort()
+int comparator(const void *p1,const void *p2)
 {
 	const int (*x)[6]=p1;
 	const int (*y)[6]=p2;
@@ -28,8 +28,6 @@ int findParent(int parent[],int component)
 
 void unionSet(int u,int v,int parent[],int rank[],int n)
 {
-	//this function unions two set on the basis of rank
-	//as shown below
 	u=findParent(parent,u);
 	v=findParent(parent,v);
 
@@ -44,24 +42,20 @@ void unionSet(int u,int v,int parent[],int rank[],int n)
 	else
 	{
 		parent[v]=u;
-		rank[u]++;//since the rank increases if the ranks of two sets are same
+		rank[u]++;
 	}
 }
 
 void kruskalAlgo(int n,int edge[n][6])
 {
-	//First we sort the edge array in ascending order
-	//so that we can access minimum distances/cost
-	qsort(edge,n,sizeof(edge[0]),comparator);
-	//inbuilt quick sort function comes with stdlib.h
-	//go to https://www.geeksforgeeks.org/comparator-function-of-qsort-in-c/
-	//if there is any doubt regarding the function
 
+	qsort(edge,n,sizeof(edge[0]),comparator);
+	
 	int parent[n];
 	int rank[n];
-	makeSet(parent,rank,n);//function to initialize parent[] and rank[]
+	makeSet(parent,rank,n);
 
-	int minCost=0;//to store the minimun cost
+	int minCost=0;
 
 	printf("Following are the edges in the constructed MST\n");
 	for(int i=0;i<n;i++)
@@ -70,9 +64,7 @@ void kruskalAlgo(int n,int edge[n][6])
 		int v2=findParent(parent,edge[i][1]);
 		int wt=edge[i][2];
 
-		if(v1!=v2)//if the parents are different that means they are in
-				//different sets so union them
-		{
+		if(v1!=v2)
 			unionSet(v1,v2,parent,rank,n);
 			minCost+=wt;
 			printf("%d -- %d == %d\n",edge[i][0],edge[i][1],wt);
@@ -85,30 +77,17 @@ void kruskalAlgo(int n,int edge[n][6])
 int main()
 {
 
-	/* Let us create following weighted graph
-				10
-			0--------1
-			| \	 |
-			6| 5\ |15
-			|	 \ |
-			2--------3
-				4	 */
-
-	//Here 5 is the number of edges, can be asked from the user
-	//when making the graph through user input
-	//3 represents the no of index positions for storing u --> v(adjacent vertices)
-	//and its cost/distance;
 	int edge[11][6]={{0,1,7},
-					{0,3,5},
-					{1,2,8},
-					{1,3,9},
-                    {1,4,7},
-                    {2,4,5},
-                    {3,4,15},
-                    {3,5,6},
-                    {4,5,8},
-                    {4,6,9},
-                    {5,6,11}};
+			{0,3,5},
+			{1,2,8},
+			{1,3,9},
+                    	{1,4,7},
+                    	{2,4,5},
+                    	{3,4,15},
+                    	{3,5,6},
+                    	{4,5,8},
+                    	{4,6,9},
+                    	{5,6,11}};
 
 	kruskalAlgo(11,edge);
 }
